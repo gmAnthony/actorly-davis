@@ -1,35 +1,72 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import "./App.css";
+import { ActorSelect } from "./components/ActorSelect/ActorSelect";
+import { Button } from "./components/Button/Button";
+import { InfoContainer } from "./components/Info/InfoContainer";
+import { NetworkGraph } from "./components/NetworkGraph/NetworkGraph";
+import { ActorContext } from "./ActorContext";
+import { useState, useEffect } from "react";
+import type { Option, Filmography } from "./ActorContext";
 
-function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
-  )
+export interface Actor {
+  id: string;
+  name: string;
+  profile_path: string;
 }
 
-export default App
+function App() {
+  const [selectedActors, setSelectedActors] = useState<Option[]>([]);
+  const [filmographies, setFilmographies] = useState<Filmography[]>([]);
+  const [actors, setActors] = useState<Option[]>([]);
+
+  useEffect(() => {
+    fetch(
+      `https://api.themoviedb.org/3/person/popular?api_key=${
+        import.meta.env.VITE_TMDB_API_KEY
+      }`
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        const names = data.results.map((actor: Actor) => ({
+          value: actor.name.toLowerCase(),
+          label: actor.name,
+          id: actor.id,
+          image: `http://image.tmdb.org/t/p/w500${actor.profile_path}`,
+        }));
+        setActors(names);
+      })
+      .catch((error) => console.log(error));
+  }, []);
+
+  return (
+    <ActorContext.Provider
+      value={{
+        selectedActors,
+        setSelectedActors,
+        filmographies,
+        setFilmographies,
+      }}
+    >
+      <InfoContainer />
+      <div className="App">
+        <h1>Actorly Davis</h1>
+        <span>
+          Have you ever wondered what movies or shows certain actors have in
+          common? Now you can know!
+        </span>
+        <div className="search-and-button">
+          <div className="actor-select-container">
+            <p>Select actors (maximum of 6)</p>
+            <ActorSelect actors={actors} />
+          </div>
+          <div>
+            <p>and then</p>
+            <Button />
+          </div>
+        </div>
+        {filmographies && <NetworkGraph data={filmographies} />}
+      </div>
+    </ActorContext.Provider>
+  );
+}
+
+export default App;
