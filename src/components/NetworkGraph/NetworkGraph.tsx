@@ -199,10 +199,6 @@ function NetworkGraph({ data }: NetworkGraphProps) {
           tooltip.style("visibility", "hidden");
         });
 
-      // node
-      //   .append("title")
-      //   .text((d) => (d.group === 1 ? `${d.id}` : `${d.actorName}`));
-
       simulation.nodes(nodes).on("tick", ticked);
       let linkForce = simulation.force("link");
       if (linkForce && "links" in linkForce) {
@@ -239,7 +235,7 @@ function NetworkGraph({ data }: NetworkGraphProps) {
 
   return (
     <>
-      <div ref={ref} />;
+      <div ref={ref} />
       <div
         id="tooltip"
         style={{
