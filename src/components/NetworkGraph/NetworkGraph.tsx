@@ -16,7 +16,7 @@ interface Link {
 interface SimulationNode extends d3.SimulationNodeDatum {
   id: string | number;
   group: number;
-  actorImage?: string;
+  actorImage?: string | null | undefined;
   actorName?: string;
 }
 
