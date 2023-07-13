@@ -1,7 +1,7 @@
 import { createContext, Dispatch, SetStateAction } from "react";
 
 export interface Option {
-  value: number;
+  value: string;
   label: string;
   id: number;
   image: string | null;

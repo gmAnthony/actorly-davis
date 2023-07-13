@@ -21,7 +21,7 @@ function App() {
 
   useEffect(() => {
     const actorOptions = jsonData.map((row) => ({
-      value: row.id,
+      value: row.id.toString(),
       label: row.name,
       id: row.id,
       image: `http://image.tmdb.org/t/p/w500${row.profile_path}`,

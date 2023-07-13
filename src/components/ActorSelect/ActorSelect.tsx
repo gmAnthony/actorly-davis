@@ -16,7 +16,7 @@ interface ActorSelectProps {
 function ActorSelect({ actors }: ActorSelectProps) {
   const { selectedActors, setSelectedActors } = useContext(ActorContext);
 
-  const handleOnChange = (values: number[]) => {
+  const handleOnChange = (values: string[]) => {
     const selected = actors.filter((actor) => values.includes(actor.value));
     setSelectedActors(selected);
   };
