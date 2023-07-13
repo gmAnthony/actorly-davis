@@ -18,7 +18,7 @@ export interface Work {
 export interface Filmography {
   actorId: number;
   actorName?: string;
-  actorImage?: string;
+  actorImage?: string | null | undefined;
   works: Work[];
 }
 
