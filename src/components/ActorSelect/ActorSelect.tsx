@@ -16,12 +16,10 @@ interface ActorSelectProps {
 function ActorSelect({ actors }: ActorSelectProps) {
   const { selectedActors, setSelectedActors } = useContext(ActorContext);
 
-  const handleOnChange = (values: string[]) => {
+  const handleOnChange = (values: number[]) => {
     const selected = actors.filter((actor) => values.includes(actor.value));
     setSelectedActors(selected);
   };
-
-  console.log(actors);
 
   return (
     <MultiSelect
@@ -30,6 +28,7 @@ function ActorSelect({ actors }: ActorSelectProps) {
       onChange={handleOnChange}
       searchable
       clearable
+      limit={200}
       nothingFound="No actors found 😔"
       maxDropdownHeight={160}
       maxSelectedValues={6}

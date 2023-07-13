@@ -6,6 +6,7 @@ import { NetworkGraph } from "./components/NetworkGraph/NetworkGraph";
 import { ActorContext } from "./ActorContext";
 import { useState, useEffect } from "react";
 import type { Option, Filmography } from "./ActorContext";
+import jsonData from "../actors.json";
 
 export interface Actor {
   id: string;
@@ -19,22 +20,14 @@ function App() {
   const [actors, setActors] = useState<Option[]>([]);
 
   useEffect(() => {
-    fetch(
-      `https://api.themoviedb.org/3/person/popular?api_key=${
-        import.meta.env.VITE_TMDB_API_KEY
-      }`
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        const names = data.results.map((actor: Actor) => ({
-          value: actor.name.toLowerCase(),
-          label: actor.name,
-          id: actor.id,
-          image: `http://image.tmdb.org/t/p/w500${actor.profile_path}`,
-        }));
-        setActors(names);
-      })
-      .catch((error) => console.log(error));
+    const actorOptions = jsonData.map((row) => ({
+      value: row.id,
+      label: row.name,
+      id: row.id,
+      image: `http://image.tmdb.org/t/p/w500${row.profile_path}`,
+    }));
+
+    setActors(actorOptions);
   }, []);
 
   return (

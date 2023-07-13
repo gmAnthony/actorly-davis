@@ -1,10 +1,10 @@
 import { createContext, Dispatch, SetStateAction } from "react";
 
 export interface Option {
-  value: string;
+  value: number;
   label: string;
   id: number;
-  image: string;
+  image: string | null;
 }
 
 export interface Work {
