@@ -2,6 +2,7 @@ import { useRef, useEffect } from "react";
 import type { Filmography } from "../../ActorContext";
 import missingAvatar from "../../assets/missingAvatar.png";
 import * as d3 from "d3";
+import { createNodesAndLinks } from "../../utils/createNodesAndLinks";
 
 interface Node {
   id: string;
@@ -30,8 +31,6 @@ interface NetworkGraphProps {
 }
 
 function NetworkGraph({ data }: NetworkGraphProps) {
-  let nodes: SimulationNode[] = [];
-  let links: SimulationLink[] = [];
   const width = 600;
   const height = 600;
   const ref = useRef(null);
@@ -40,57 +39,11 @@ function NetworkGraph({ data }: NetworkGraphProps) {
     if (ref.current && Array.isArray(data)) {
       d3.select(ref.current).select("svg").remove();
 
-      data.forEach((actor) => {
-        let actorNode = nodes.find(
-          (node) => node.id === actor.actorId.toString()
-        );
-        if (!actorNode) {
-          actorNode = {
-            id: actor.actorId.toString(),
-            group: 2,
-            actorName: actor.actorName,
-            actorImage: actor.actorImage,
-          };
-          nodes.push(actorNode);
-        }
+      const { nodes, links } = createNodesAndLinks(data);
 
-        actor.works.forEach((work) => {
-          let workNode = nodes.find((node) => node.id === work.work.title);
-          if (!workNode) {
-            workNode = { id: work.work.title, group: 1 };
-            nodes.push(workNode);
-          }
-
-          links.push({
-            // @ts-ignore
-            source: actorNode.id as any,
-            target: workNode.id as any,
-          });
-        });
-      });
-
-      let workCounts = new Map<string, number>();
-      links.forEach((link) => {
-        const workId = link.target.toString();
-        if (workCounts.has(workId)) {
-          workCounts.set(workId, workCounts.get(workId)! + 1);
-        } else {
-          workCounts.set(workId, 1);
-        }
-      });
-
-      // Filter out work nodes that only appear once
-      nodes = nodes.filter((node) => {
-        return (
-          node.group !== 1 ||
-          (workCounts.has(node.id.toString()) &&
-            workCounts.get(node.id.toString())! > 1)
-        );
-      });
-
-      // Filter out links that connect to removed work nodes
-      links = links.filter((link) => {
-        return nodes.find((node) => node.id === link.target.toString());
+      const color = d3.scaleOrdinal(d3.schemeCategory10);
+      nodes.forEach((node) => {
+        if (node.group === 2) node.color = color(node.id.toString());
       });
 
       let svg = d3
@@ -124,7 +77,7 @@ function NetworkGraph({ data }: NetworkGraphProps) {
             d3.forceLink(links) as d3.ForceLink<SimulationNode, SimulationLink>
           ).id((d) => d.id)
         )
-        .force("charge", d3.forceManyBody().strength(-1000))
+        .force("charge", d3.forceManyBody().strength(-300))
         .force("center", d3.forceCenter(width / 2, height / 2));
 
       let defs = svg.append("defs");
@@ -153,7 +106,8 @@ function NetworkGraph({ data }: NetworkGraphProps) {
         .data(links)
         .enter()
         .append("line")
-        .attr("stroke", "black");
+        .attr("stroke-width", 1)
+        .attr("stroke", (d) => d.source.color || "black");
 
       const tooltip = d3.select("#tooltip");
       let timeoutId: number;
@@ -169,7 +123,13 @@ function NetworkGraph({ data }: NetworkGraphProps) {
           return d.group === 1 ? 5 : 30;
         })
         .attr("fill", function (d) {
-          return d.group === 1 ? "red" : `url(#image-${d.id})`;
+          return d.group === 1 ? "black" : `url(#image-${d.id})`;
+        })
+        .style("stroke", function (d) {
+          return d.color || "black";
+        })
+        .style("stroke-width", function (d) {
+          return d.group === 1 ? "0px" : "3px";
         })
         .call(
           d3

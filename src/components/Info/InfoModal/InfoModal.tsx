@@ -47,11 +47,7 @@ function InfoModal({
         <p>Here are my development plans for this site:</p>
         <ul style={{ listStyle: "none" }}>
           <li>
-            <Badge color="blue">Current</Badge> Fix some wonkiness with the
-            network chart
-          </li>
-          <li>
-            <Badge color="yellow">Planned</Badge> Make the site mobile-friendly
+            <Badge color="blue">Current</Badge> Make the site mobile-friendly
           </li>
           <li>
             <Badge color="yellow">Planned</Badge> Add an alternate view which
