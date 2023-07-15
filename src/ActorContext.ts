@@ -27,4 +27,6 @@ export const ActorContext = createContext({
   setSelectedActors: (() => {}) as Dispatch<SetStateAction<Option[]>>,
   filmographies: [] as Filmography[],
   setFilmographies: (() => {}) as Dispatch<SetStateAction<Filmography[]>>,
+  filmographiesFetched: false,
+  setFilmographiesFetched: (() => {}) as Dispatch<SetStateAction<boolean>>,
 });

@@ -4,11 +4,12 @@ import { useContext } from "react";
 import { useFetchFilmographies } from "../../hooks/useFetchFilmographies";
 
 function Button() {
-  const { selectedActors } = useContext(ActorContext);
+  const { selectedActors, setFilmographiesFetched } = useContext(ActorContext);
   const { fetchFilmographies, error, loading } =
     useFetchFilmographies(selectedActors);
 
   const handleClick = async () => {
+    setFilmographiesFetched(true);
     await fetchFilmographies();
   };
 

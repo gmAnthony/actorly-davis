@@ -18,6 +18,8 @@ function App() {
   const [selectedActors, setSelectedActors] = useState<Option[]>([]);
   const [filmographies, setFilmographies] = useState<Filmography[]>([]);
   const [actors, setActors] = useState<Option[]>([]);
+  const [filmographiesFetched, setFilmographiesFetched] =
+    useState<boolean>(false);
 
   useEffect(() => {
     const actorOptions = jsonData.map((row) => ({
@@ -37,6 +39,8 @@ function App() {
         setSelectedActors,
         filmographies,
         setFilmographies,
+        filmographiesFetched,
+        setFilmographiesFetched,
       }}
     >
       <InfoContainer />

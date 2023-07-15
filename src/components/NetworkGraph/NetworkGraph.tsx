@@ -1,8 +1,9 @@
-import { useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 import type { Filmography } from "../../ActorContext";
 import missingAvatar from "../../assets/missingAvatar.png";
 import * as d3 from "d3";
 import { createNodesAndLinks } from "../../utils/createNodesAndLinks";
+import { ActorContext } from "../../ActorContext";
 
 interface Node {
   id: string;
@@ -31,6 +32,9 @@ interface NetworkGraphProps {
 }
 
 function NetworkGraph({ data }: NetworkGraphProps) {
+  const { filmographiesFetched } = useContext(ActorContext);
+  const [hasLinks, setHasLinks] = useState(false);
+  const showNoLinks = !hasLinks && filmographiesFetched;
   const width = 600;
   const height = 600;
   const ref = useRef(null);
@@ -41,6 +45,7 @@ function NetworkGraph({ data }: NetworkGraphProps) {
 
       const { nodes, links } = createNodesAndLinks(data);
 
+      if (links.length > 0) setHasLinks(true);
       const color = d3.scaleOrdinal(d3.schemeCategory10);
       nodes.forEach((node) => {
         if (node.group === 2) node.color = color(node.id.toString());
@@ -192,9 +197,11 @@ function NetworkGraph({ data }: NetworkGraphProps) {
       }
     }
   }, [ref, data]);
-
   return (
     <>
+      {showNoLinks && (
+        <span>Uh oh, no connections. Try some different actors.</span>
+      )}
       <div ref={ref} />
       <div
         id="tooltip"
