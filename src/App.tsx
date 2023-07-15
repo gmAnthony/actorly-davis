@@ -1,4 +1,3 @@
-import "./App.css";
 import { ActorSelect } from "./components/ActorSelect/ActorSelect";
 import { Button } from "./components/Button/Button";
 import { InfoContainer } from "./components/Info/InfoContainer";

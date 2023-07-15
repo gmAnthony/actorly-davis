@@ -34,9 +34,28 @@ interface NetworkGraphProps {
 function NetworkGraph({ data }: NetworkGraphProps) {
   const { filmographiesFetched } = useContext(ActorContext);
   const [hasLinks, setHasLinks] = useState(false);
+  const [dimensions, setDimensions] = useState({
+    height: window.innerHeight,
+    width: window.innerWidth,
+  });
   const showNoLinks = !hasLinks && filmographiesFetched;
-  const width = 600;
-  const height = 600;
+  useEffect(() => {
+    function handleResize() {
+      setDimensions({
+        height: window.innerHeight,
+        width: window.innerWidth,
+      });
+    }
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  const width = dimensions.width - dimensions.width * 0.2;
+  const height = dimensions.height - dimensions.height * 0.5;
   const ref = useRef(null);
 
   useEffect(() => {
