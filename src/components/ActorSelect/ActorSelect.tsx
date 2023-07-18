@@ -26,6 +26,7 @@ function ActorSelect({ actors }: ActorSelectProps) {
       data={actors}
       value={selectedActors.map((actor) => actor.value)}
       onChange={handleOnChange}
+      dropdownPosition="bottom"
       searchable
       clearable
       limit={200}

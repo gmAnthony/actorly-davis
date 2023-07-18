@@ -28,40 +28,45 @@ function InfoModal({
           style={{
             display: "flex",
             alignItems: "center",
-            justifyContent: "space-between",
+            justifyContent: "center",
           }}
         >
-          <span>👋</span>
+          <Avatar
+            src={myAvatar}
+            style={{ marginRight: "8px" }}
+            alt="Me, Anthony Miller"
+            radius="xl"
+          />
           <h2>Hey! My name is Anthony Miller</h2>
-          <Avatar src={myAvatar} alt="Me, Anthony Miller" radius="xl" />
-          <span>👋</span>
         </div>
-        <p>
-          I'm the software engineer that created this fine website. A few years
-          ago my wife told me she had a million dollar idea for a website and,
-          while maybe not capable of generating a million dollars, this website
-          was her great idea. My hope is that if you don't find it useful you at
-          least find it amusing. I built this site using React, TypeScript, and
-          Mantine.
-        </p>
-        <p>Here are my development plans for this site:</p>
-        <ul style={{ listStyle: "none" }}>
-          <li>
-            <Badge color="blue">Current</Badge> Make the site mobile-friendly
-          </li>
-          <li>
-            <Badge color="yellow">Planned</Badge> Add an alternate view which
-            just lists the shared movies/films
-          </li>
-          <li>
-            <Badge color="yellow">Planned</Badge> Add the ability to only show
-            movies or shows instead of both
-          </li>
-        </ul>
-        <p>
-          Check out more of my work at{" "}
-          <a href="https://alphawaffle.com">alphawaffle</a>.
-        </p>
+        <div style={{ textAlign: "left" }}>
+          <p>
+            I'm the software engineer that created this fine website. A few
+            years ago my wife told me she had a million dollar idea for a
+            website and, while maybe not capable of generating a million
+            dollars, this website was her great idea. My hope is that if you
+            don't find it useful you at least find it amusing. I built this site
+            using React, TypeScript, and Mantine.
+          </p>
+          <p>Here are my development plans for this site:</p>
+          <ul style={{ listStyle: "none" }}>
+            <li>
+              <Badge color="blue">Current</Badge> Make the site mobile-friendly
+            </li>
+            <li>
+              <Badge color="yellow">Planned</Badge> Add an alternate view which
+              just lists the shared movies/films
+            </li>
+            <li>
+              <Badge color="yellow">Planned</Badge> Add the ability to only show
+              movies or shows instead of both
+            </li>
+          </ul>
+          <p>
+            Check out more of my work at{" "}
+            <a href="https://alphawaffle.com">alphawaffle</a>.
+          </p>
+        </div>
       </div>
     </Modal>
   );
