@@ -32,9 +32,9 @@ function createNodesAndLinks(data: Filmography[]) {
     }
 
     actor.works.forEach((work) => {
-      let workNode = tempNodes.find((node) => node.id === work.work.title);
+      let workNode = tempNodes.find((node) => node.id === work.title);
       if (!workNode) {
-        workNode = { id: work.work.title, group: 1 };
+        workNode = { id: work.title, group: 1 };
         tempNodes.push(workNode);
       }
 

@@ -9,7 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@mantine/core": "^6.0.14",
+    "@mantine/core": "^6.0.19",
     "@mantine/hooks": "^6.0.14",
     "@tabler/icons-react": "^2.23.0",
     "d3": "^7.8.5",

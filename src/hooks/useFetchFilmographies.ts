@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import type { Option } from "../ActorContext";
+import type { Option, Work } from "../ActorContext";
 import { ActorContext } from "../ActorContext";
 
 interface Movie {
@@ -14,49 +14,44 @@ interface Show {
   character: string;
 }
 
+const BASE_URL = "https://api.themoviedb.org/3/person/";
+const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
+
 const useFetchFilmographies = (selectedActors: Option[]) => {
   const { filmographies, setFilmographies } = useContext(ActorContext);
   const [error, setError] = useState<Error | null>(null);
   const [loading, setLoading] = useState(false);
-  const fetchFilmography = async (actorId: number) => {
+
+  const fetchCredits = async (actorId: number, type: "movie" | "tv") => {
     const response = await fetch(
-      `https://api.themoviedb.org/3/person/${actorId}/movie_credits?api_key=${
-        import.meta.env.VITE_TMDB_API_KEY
-      }`
+      `${BASE_URL}${actorId}/${type}_credits?api_key=${API_KEY}`
     );
-    const tvResponse = await fetch(
-      `https://api.themoviedb.org/3/person/${actorId}/tv_credits?api_key=${
-        import.meta.env.VITE_TMDB_API_KEY
-      }`
-    );
-    const data = await response.json();
-    const tvData = await tvResponse.json();
-    const movieFilmography = data.cast.map((movie: Movie) => ({
-      work: {
-        id: movie.id,
-        title: movie.title,
-        character: movie.character,
-      },
+    return response.json();
+  };
+
+  const parseCredits = <T extends "movie" | "tv">(
+    data: T extends "movie" ? Movie[] : Show[],
+    type: T
+  ): Work[] => {
+    return data.map((item: Movie | Show) => ({
+      id: item.id,
+      title: type === "movie" ? (item as Movie).title : (item as Show).name,
+      character: item.character,
     }));
-    const tvFilmography = tvData.cast.map((show: Show) => ({
-      work: {
-        id: show.id,
-        title: show.name,
-        character: show.character,
-      },
-    }));
-    const works = [...movieFilmography, ...tvFilmography];
-    const actorImage = selectedActors.find(
-      (actor) => actor.id === actorId
-    )?.image;
-    const actorName = selectedActors.find(
-      (actor) => actor.id === actorId
-    )?.label;
+  };
+
+  const fetchFilmography = async (actorId: number) => {
+    const movieData = await fetchCredits(actorId, "movie");
+    const tvData = await fetchCredits(actorId, "tv");
+    const movieFilmography = parseCredits(movieData.cast, "movie");
+    const tvFilmography = parseCredits(tvData.cast, "tv");
+    const actorDetails = selectedActors.find((actor) => actor.id === actorId);
+
     return {
       actorId: actorId,
-      actorName: actorName,
-      actorImage: actorImage,
-      works: works,
+      actorName: actorDetails?.label,
+      actorImage: actorDetails?.image,
+      works: [...movieFilmography, ...tvFilmography],
     };
   };
 

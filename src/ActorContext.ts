@@ -8,11 +8,9 @@ export interface Option {
 }
 
 export interface Work {
-  work: {
-    id: number;
-    title: string;
-    character: string;
-  };
+  id: number;
+  title: string;
+  character: string;
 }
 
 export interface Filmography {

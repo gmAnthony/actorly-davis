@@ -11,7 +11,6 @@ function InfoModal({
     <Modal
       opened={opened}
       onClose={onClose}
-      // title="Hey! 👋"
       withCloseButton={false}
       centered
       size="lg"
